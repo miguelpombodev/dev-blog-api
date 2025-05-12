@@ -4,7 +4,7 @@ import { BaseEntity } from "./base_entity.schema";
 
 export type ArticleDocument = HydratedDocument<Article>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Article extends BaseEntity {
   @Prop({ required: true })
   title: string;

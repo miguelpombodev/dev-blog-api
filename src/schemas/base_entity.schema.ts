@@ -1,13 +1,7 @@
 import { Prop } from "@nestjs/mongoose";
-import { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 
 export abstract class BaseEntity {
-  @Prop({ type: String })
-  _id: ObjectId;
-
-  @Prop()
-  createdAt: Date;
-
-  @Prop()
-  updatedAt: Date;
+  @Prop({ type: Types.ObjectId })
+  _id: Types.ObjectId;
 }
