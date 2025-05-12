@@ -12,7 +12,7 @@ export class ArticleService {
     @InjectModel(Article.name) private articleModel: Model<Article>,
   ) {}
 
-  async getHello(_dto: CreateArticleDto): Promise<Article> {
+  async createArticleService(_dto: CreateArticleDto): Promise<Article> {
     const createdArticle = new this.articleModel({
       _id: new Types.ObjectId(),
       title: _dto.title,
@@ -22,5 +22,9 @@ export class ArticleService {
     });
 
     return await this._articleRepository.create(createdArticle);
+  }
+
+  async getArticleBySlugService(slug: string): Promise<Article> {
+    return await this._articleRepository.getOneBySlug(slug);
   }
 }
