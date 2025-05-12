@@ -27,4 +27,8 @@ export class ArticleService {
   async getArticleBySlugService(slug: string): Promise<Article> {
     return await this._articleRepository.getOneBySlug(slug);
   }
+
+  async getAllArticlesService(): Promise<Article[]> {
+    return await this._articleRepository.getAll();
+  }
 }

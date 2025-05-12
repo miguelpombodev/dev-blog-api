@@ -24,5 +24,9 @@ export default class ArticlesRepository {
     return result;
   }
 
-  async getAll() {}
+  async getAll(): Promise<Article[]> {
+    const articles = await this.articleModel.find().exec();
+
+    return articles;
+  }
 }

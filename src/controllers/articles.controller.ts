@@ -8,7 +8,9 @@ import { ZodValidationPipe } from "src/pipes/zod-validation.pipe";
 import { Article } from "src/schemas/article.schema";
 import { ArticleService } from "src/services/articles.service";
 
-@Controller()
+@Controller({
+  path: "/article",
+})
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
@@ -20,11 +22,17 @@ export class ArticleController {
     return this.articleService.createArticleService(body);
   }
 
-  @Get("/article/:slug")
+  @Get("/:slug")
   async getArticleBySlug(
     @Param("slug", new ZodValidationPipe(GetBySlugSchema)) slug: string,
   ): Promise<Article> {
     const article = await this.articleService.getArticleBySlugService(slug);
     return article;
+  }
+
+  @Get()
+  async getAllArticles(): Promise<Article[]> {
+    const articles = await this.articleService.getAllArticlesService();
+    return articles;
   }
 }
