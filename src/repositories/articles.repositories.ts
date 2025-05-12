@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
 import { Article, ArticleDocument } from "src/schemas/article.schema";
 
 @Injectable()
@@ -28,5 +28,15 @@ export default class ArticlesRepository {
     const articles = await this.articleModel.find().exec();
 
     return articles;
+  }
+
+  async updateOneArticle(article: Partial<Article>): Promise<Article | null> {
+    return await this.articleModel
+      .findOneAndUpdate({ id: article._id }, article, { new: true })
+      .exec();
+  }
+
+  async deleteOneArticleById(id: ObjectId): Promise<void> {
+    await this.articleModel.findByIdAndDelete(id).exec();
   }
 }
