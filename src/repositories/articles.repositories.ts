@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, ObjectId } from "mongoose";
+import { Model, ObjectId, Types } from "mongoose";
 import { Article, ArticleDocument } from "src/schemas/article.schema";
 
 @Injectable()
@@ -16,10 +16,13 @@ export default class ArticlesRepository {
     return result;
   }
 
-  async getOneBySlug(slug: string): Promise<Article> {
-    const result = (await this.articleModel
-      .findOne({ slug })
-      .exec()) as Article;
+  async getOneById(id: Types.ObjectId): Promise<Article | null> {
+    const result = await this.articleModel.findById(id).exec();
+    return result;
+  }
+
+  async getOneBySlug(slug: string): Promise<Article | null> {
+    const result = await this.articleModel.findOne({ slug }).exec();
 
     return result;
   }
@@ -32,7 +35,7 @@ export default class ArticlesRepository {
 
   async updateOneArticle(article: Partial<Article>): Promise<Article | null> {
     return await this.articleModel
-      .findOneAndUpdate({ id: article._id }, article, { new: true })
+      .findByIdAndUpdate(article._id, article, { new: true })
       .exec();
   }
 
