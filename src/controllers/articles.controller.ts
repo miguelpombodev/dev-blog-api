@@ -61,15 +61,21 @@ export class ArticleController {
 
   @Put("/:id")
   async updateOneArticle(
+    @Res() response: Response,
     @Body(new ZodValidationPipe(CreateAndUpdateArticleDtoSchema))
     body: CreateAndUpdateArticleDto,
     @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
-  ): Promise<Record<"status", string | null>> {
+  ): Promise<Response> {
     const result = await this.articleService.updateOneArticleService(id, body);
 
-    return {
-      status: result,
-    };
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
+
+    return response.send(result.data);
   }
 
   @Delete("/:id")

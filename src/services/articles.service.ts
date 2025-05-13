@@ -44,11 +44,11 @@ export class ArticleService {
   async updateOneArticleService(
     id: Types.ObjectId,
     newModel: CreateAndUpdateArticleDto,
-  ): Promise<string | null> {
+  ): Promise<Result<Article | string>> {
     const article = await this._articleRepository.getOneById(id);
 
     if (article === null) {
-      return null;
+      return Result.failure<Article>(ArticleErrors.articleNotFound);
     }
 
     article.title = newModel.title;
@@ -58,7 +58,7 @@ export class ArticleService {
 
     await this._articleRepository.updateOneArticle(article);
 
-    return "success!";
+    return Result.success<string>("success!");
   }
 
   async deleteOneArticleService(id: Types.ObjectId): Promise<string | null> {
