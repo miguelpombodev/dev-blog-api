@@ -16,15 +16,24 @@ export class ArticleService {
 
   async createArticleService(
     _dto: CreateAndUpdateArticleDto,
-  ): Promise<Article> {
+  ): Promise<Result<Article | Record<string, string>>> {
+    const result = await this._articleRepository.getOneBySlug(_dto.slug);
+
+    if (result) {
+      return Result.failure<Article>(ArticleErrors.articleAlreadyRegistered);
+    }
+
     const createdArticle = new this.articleModel({
+      _id: new Types.ObjectId(),
       title: _dto.title,
       content: _dto.content,
       slug: _dto.slug,
       tags: _dto.tags,
     });
 
-    return await this._articleRepository.create(createdArticle);
+    await this._articleRepository.create(createdArticle);
+
+    return Result.success<Record<string, string>>({ status: "success!" });
   }
 
   async getArticleBySlugService(slug: string): Promise<Result<Article>> {
@@ -44,7 +53,7 @@ export class ArticleService {
   async updateOneArticleService(
     id: Types.ObjectId,
     newModel: CreateAndUpdateArticleDto,
-  ): Promise<Result<Article | string>> {
+  ): Promise<Result<Article | Record<string, string>>> {
     const article = await this._articleRepository.getOneById(id);
 
     if (article === null) {
@@ -58,7 +67,7 @@ export class ArticleService {
 
     await this._articleRepository.updateOneArticle(article);
 
-    return Result.success<string>("success!");
+    return Result.success<Record<string, string>>({ status: "success!" });
   }
 
   async deleteOneArticleService(id: Types.ObjectId): Promise<string | null> {

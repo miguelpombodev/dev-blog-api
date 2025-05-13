@@ -32,8 +32,17 @@ export class ArticleController {
     @Res() response: Response,
     @Body(new ZodValidationPipe(CreateAndUpdateArticleDtoSchema))
     body: CreateAndUpdateArticleDto,
-  ): Promise<Article> {
-    return this.articleService.createArticleService(body);
+  ): Promise<Response> {
+    const result = await this.articleService.createArticleService(body);
+
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
+
+    return response.send(result.data);
   }
 
   @Get("/:slug")
