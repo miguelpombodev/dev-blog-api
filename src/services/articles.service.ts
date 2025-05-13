@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import ArticlesRepository from "src/repositories/articles.repositories";
 import { CreateAndUpdateArticleDto } from "src/dtos/createArticleDto";
 import { Article } from "src/schemas/article.schema";
@@ -13,6 +13,10 @@ export class ArticleService {
     private readonly _articleRepository: ArticlesRepository,
     @InjectModel(Article.name) private articleModel: Model<Article>,
   ) {}
+
+  private readonly _logger = new Logger(ArticleService.name, {
+    timestamp: true,
+  });
 
   async createArticleService(
     _dto: CreateAndUpdateArticleDto,
@@ -32,6 +36,10 @@ export class ArticleService {
     });
 
     await this._articleRepository.create(createdArticle);
+
+    this._logger.log(
+      `Article with slug ${createdArticle.slug} was successfully created!`,
+    );
 
     return Result.success<Record<string, string>>({ status: "success!" });
   }
