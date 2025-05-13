@@ -1,11 +1,11 @@
 import { Injectable, Logger } from "@nestjs/common";
-import ArticlesRepository from "src/repositories/articles.repositories";
-import { CreateAndUpdateArticleDto } from "src/dtos/createArticleDto";
-import { Article } from "src/schemas/article.schema";
+import ArticlesRepository from "@repositories/articles.repositories";
+import { CreateAndUpdateArticleDto } from "@dtos/createArticleDto";
+import { Article } from "@schemas/article.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { Result } from "src/abstractions/result";
-import ArticleErrors from "src/errors/article.errors";
+import { Result } from "@abstractions/result";
+import ArticleErrors from "@errors/article.errors";
 
 @Injectable()
 export class ArticleService {

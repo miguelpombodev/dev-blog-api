@@ -14,11 +14,11 @@ import { Types } from "mongoose";
 import {
   CreateAndUpdateArticleDto,
   CreateAndUpdateArticleDtoSchema,
-} from "src/dtos/createArticleDto";
-import { GetByIdSchema, GetBySlugSchema } from "src/dtos/getArticleSchema";
-import { ZodValidationPipe } from "src/pipes/zod-validation.pipe";
-import { Article } from "src/schemas/article.schema";
-import { ArticleService } from "src/services/articles.service";
+} from "@dtos/createArticleDto";
+import { GetByIdSchema, GetBySlugSchema } from "@dtos/getArticleSchema";
+import { ZodValidationPipe } from "@pipes/zod-validation.pipe";
+import { Article } from "@schemas/article.schema";
+import { ArticleService } from "@services/articles.service";
 
 @Controller({
   path: "/article",

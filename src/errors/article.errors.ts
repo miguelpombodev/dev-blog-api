@@ -1,4 +1,4 @@
-import { Error } from "src/abstractions/result";
+import { Error } from "@abstractions/result";
 
 export default class ArticleErrors {
   public static articleNotFound: Error = new Error(

@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { RepositoriesModule } from "src/repositories/repositories.module";
+import { RepositoriesModule } from "@repositories/repositories.module";
 import { ArticleService } from "./articles.service";
 import { MongooseModule } from "@nestjs/mongoose";
-import { Article, ArticleSchema } from "src/schemas/article.schema";
+import { Article, ArticleSchema } from "@schemas/article.schema";
 
 @Module({
   imports: [
