@@ -1,9 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import ArticlesRepository from "src/repositories/articles.repositories";
-import { CreateAndUpdateArticleDto } from "src/dtosSchemas/createArticleDto";
+import { CreateAndUpdateArticleDto } from "src/dtos/createArticleDto";
 import { Article } from "src/schemas/article.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
+import { Result } from "src/abstractions/result";
+import ArticleErrors from "src/errors/article.errors";
 
 @Injectable()
 export class ArticleService {
@@ -25,8 +27,14 @@ export class ArticleService {
     return await this._articleRepository.create(createdArticle);
   }
 
-  async getArticleBySlugService(slug: string): Promise<Article | null> {
-    return await this._articleRepository.getOneBySlug(slug);
+  async getArticleBySlugService(slug: string): Promise<Result<Article>> {
+    const result = await this._articleRepository.getOneBySlug(slug);
+
+    if (result === null) {
+      return Result.failure<Article>(ArticleErrors.articleNotFound);
+    }
+
+    return Result.success<Article>(result);
   }
 
   async getAllArticlesService(): Promise<Article[]> {

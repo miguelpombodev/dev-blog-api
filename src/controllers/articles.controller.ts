@@ -3,19 +3,19 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
+  Res,
 } from "@nestjs/common";
+import { Response } from "express";
 import { Types } from "mongoose";
 import {
   CreateAndUpdateArticleDto,
   CreateAndUpdateArticleDtoSchema,
-} from "src/dtosSchemas/createArticleDto";
-import {
-  GetByIdSchema,
-  GetBySlugSchema,
-} from "src/dtosSchemas/getArticleSchema";
+} from "src/dtos/createArticleDto";
+import { GetByIdSchema, GetBySlugSchema } from "src/dtos/getArticleSchema";
 import { ZodValidationPipe } from "src/pipes/zod-validation.pipe";
 import { Article } from "src/schemas/article.schema";
 import { ArticleService } from "src/services/articles.service";
@@ -27,7 +27,9 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post("/create")
+  @HttpCode(201)
   async createArticle(
+    @Res() response: Response,
     @Body(new ZodValidationPipe(CreateAndUpdateArticleDtoSchema))
     body: CreateAndUpdateArticleDto,
   ): Promise<Article> {
@@ -36,10 +38,19 @@ export class ArticleController {
 
   @Get("/:slug")
   async getArticleBySlug(
+    @Res() response: Response,
     @Param("slug", new ZodValidationPipe(GetBySlugSchema)) slug: string,
-  ): Promise<Article | null> {
-    const article = await this.articleService.getArticleBySlugService(slug);
-    return article;
+  ): Promise<Response> {
+    const result = await this.articleService.getArticleBySlugService(slug);
+
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
+
+    return response.send(result.data);
   }
 
   @Get()
