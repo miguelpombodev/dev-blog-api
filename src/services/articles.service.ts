@@ -70,15 +70,17 @@ export class ArticleService {
     return Result.success<Record<string, string>>({ status: "success!" });
   }
 
-  async deleteOneArticleService(id: Types.ObjectId): Promise<string | null> {
+  async deleteOneArticleService(
+    id: Types.ObjectId,
+  ): Promise<Result<Article | Record<string, string>>> {
     const article = await this._articleRepository.getOneById(id);
 
     if (article === null) {
-      return null;
+      return Result.failure<Article>(ArticleErrors.articleNotFound);
     }
 
     await this._articleRepository.deleteOneArticleById(id);
 
-    return "success!";
+    return Result.success<Record<string, string>>({ status: "success!" });
   }
 }

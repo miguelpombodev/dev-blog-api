@@ -89,12 +89,17 @@ export class ArticleController {
 
   @Delete("/:id")
   async deleteOneArticle(
+    @Res() response: Response,
     @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
-  ): Promise<Record<"status", string | null>> {
+  ): Promise<Response> {
     const result = await this.articleService.deleteOneArticleService(id);
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
 
-    return {
-      status: result,
-    };
+    return response.send(result.data);
   }
 }
