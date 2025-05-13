@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
 import { Types } from "mongoose";
 import {
   CreateAndUpdateArticleDto,
@@ -47,6 +55,17 @@ export class ArticleController {
     @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
   ): Promise<Record<"status", string | null>> {
     const result = await this.articleService.updateOneArticleService(id, body);
+
+    return {
+      status: result,
+    };
+  }
+
+  @Delete("/:id")
+  async deleteOneArticle(
+    @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
+  ): Promise<Record<"status", string | null>> {
+    const result = await this.articleService.deleteOneArticleService(id);
 
     return {
       status: result,

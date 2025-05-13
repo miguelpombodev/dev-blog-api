@@ -52,4 +52,16 @@ export class ArticleService {
 
     return "success!";
   }
+
+  async deleteOneArticleService(id: Types.ObjectId): Promise<string | null> {
+    const article = await this._articleRepository.getOneById(id);
+
+    if (article === null) {
+      return null;
+    }
+
+    await this._articleRepository.deleteOneArticleById(id);
+
+    return "success!";
+  }
 }
