@@ -4,11 +4,15 @@ import ArticlesRepository from "./articles.repositories";
 import { Article, ArticleSchema } from "src/schemas/article.schema";
 import { env } from "src/env.config";
 import { AuthRepository } from "./auth.repository";
+import { Auth, AuthSchema } from "@schemas/auth.schema";
 
 @Module({
   imports: [
     MongooseModule.forRoot(env.APP_ATLAS_MONGODB_URL),
-    MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }]),
+    MongooseModule.forFeature([
+      { name: Article.name, schema: ArticleSchema },
+      { name: Auth.name, schema: AuthSchema },
+    ]),
   ],
   providers: [ArticlesRepository, AuthRepository],
   exports: [ArticlesRepository, AuthRepository],
