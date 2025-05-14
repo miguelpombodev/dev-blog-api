@@ -5,11 +5,13 @@ import { ArticleController } from "@controllers/articles.controller";
 import { ControllersModule } from "@controllers/controllers.module";
 import { env } from "src/env.config";
 import { ErrorMiddleware } from "@middlewares/error.middleware";
+import { TerminusModule } from "@nestjs/terminus";
 
 @Module({
   imports: [
     MongooseModule.forRoot(env.APP_ATLAS_MONGODB_URL),
     ControllersModule,
+    TerminusModule,
     ThrottlerModule.forRoot({
       throttlers: [
         {
