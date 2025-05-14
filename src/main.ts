@@ -12,6 +12,9 @@ async function bootstrap() {
       timestamp: true,
     }),
   });
+  app.enableCors({
+    origin: env.APP_CORS_ORIGIN,
+  });
   await app.listen(env.APP_PORT ?? 3000);
 }
 bootstrap();

@@ -13,6 +13,7 @@ const envSchema = z.object({
     .transform((val) => val.split(",").map((val) => val.trim() as LogLevel))
     .pipe(z.array(z.enum(logLevels as [LogLevel, ...LogLevel[]]))),
   APP_URL: z.string().url(),
+  APP_CORS_ORIGIN: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
