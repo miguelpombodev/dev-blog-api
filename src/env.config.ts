@@ -14,6 +14,11 @@ const envSchema = z.object({
     .pipe(z.array(z.enum(logLevels as [LogLevel, ...LogLevel[]]))),
   APP_URL: z.string().url(),
   APP_CORS_ORIGIN: z.string(),
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
+  GITHUB_CALLBACK_URL: z.string(),
+  AUTH_SECRET: z.string(),
+  GITHUB_EMAIL: z.string().email(),
 });
 
 const _env = envSchema.safeParse(process.env);
