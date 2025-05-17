@@ -1,17 +1,14 @@
 import { IUserRequest } from "@abstractions/auth/user.interface";
 import { Controller, Get, Req, Res, UseGuards } from "@nestjs/common";
-import { JwtService, JwtSignOptions } from "@nestjs/jwt";
+import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "@nestjs/passport";
 import { Response } from "express";
-import { env } from "src/env.config";
+import { authConfig } from "src/auth/auth.config";
 @Controller({
   path: "/auth",
 })
 export class AuthController {
   constructor(private readonly jwtService: JwtService) {}
-  private readonly jwtOptions: JwtSignOptions = {
-    secret: env.AUTH_SECRET,
-  };
 
   @Get("github")
   @UseGuards(AuthGuard("github"))
@@ -32,10 +29,7 @@ export class AuthController {
       username: user.profile.username,
     };
 
-    const token = await this.jwtService.signAsync(
-      tokenPayload,
-      this.jwtOptions,
-    );
+    const token = await this.jwtService.signAsync(tokenPayload, authConfig);
 
     const now = new Date();
 
@@ -46,6 +40,6 @@ export class AuthController {
       expires: new Date(now.getTime() + 1000 * 36000),
     });
 
-    return response.send();
+    return true;
   }
 }

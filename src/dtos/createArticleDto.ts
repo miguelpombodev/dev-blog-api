@@ -1,7 +1,11 @@
 import { z } from "zod";
 
 export const CreateAndUpdateArticleDtoSchema = z.object({
+  articleImageSrc: z.string(),
   title: z.string().min(3, "Title must have at least 3 characters"),
+  briefDescription: z
+    .string()
+    .min(3, "Brif Description mus have at least 3 characters"),
   content: z.string().min(10, "Content must have at least 10 characters"),
   slug: z.string().min(3, "Slug must have at least 3 characters").toLowerCase(),
   tags: z

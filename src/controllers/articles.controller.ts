@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from "@nestjs/common";
 import { Response } from "express";
 import { Types } from "mongoose";
@@ -19,6 +20,7 @@ import { GetByIdSchema, GetBySlugSchema } from "@dtos/getArticleSchema";
 import { ZodValidationPipe } from "@pipes/zod-validation.pipe";
 import { Article } from "@schemas/article.schema";
 import { ArticleService } from "@services/articles.service";
+import { JwtAuthGuard } from "src/guards/jwtAuth.guard";
 
 @Controller({
   path: "/article",
@@ -27,6 +29,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post("/create")
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   async createArticle(
     @Res() response: Response,
@@ -69,6 +72,7 @@ export class ArticleController {
   }
 
   @Put("/:id")
+  @UseGuards(JwtAuthGuard)
   async updateOneArticle(
     @Res() response: Response,
     @Body(new ZodValidationPipe(CreateAndUpdateArticleDtoSchema))
@@ -88,6 +92,7 @@ export class ArticleController {
   }
 
   @Delete("/:id")
+  @UseGuards(JwtAuthGuard)
   async deleteOneArticle(
     @Res() response: Response,
     @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
