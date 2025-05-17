@@ -5,7 +5,13 @@ import { BaseEntity } from "./base_entity.schema";
 @Schema({ timestamps: true })
 export class Article extends BaseEntity {
   @Prop({ required: true })
+  articleImageSrc: string;
+
+  @Prop({ required: true })
   title: string;
+
+  @Prop({ required: true })
+  briefDescription: string;
 
   @Prop({ required: true, unique: true })
   slug: string;

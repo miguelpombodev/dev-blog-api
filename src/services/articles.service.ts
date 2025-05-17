@@ -29,7 +29,9 @@ export class ArticleService {
 
     const createdArticle = new this.articleModel({
       _id: new Types.ObjectId(),
+      articleImageSrc: _dto.articleImageSrc,
       title: _dto.title,
+      briefDescription: _dto.briefDescription,
       content: _dto.content,
       slug: _dto.slug,
       tags: _dto.tags,
