@@ -9,6 +9,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { env } from "src/env.config";
 import { GithubStrategy } from "src/auth/github.strategy";
 import { PassportModule } from "@nestjs/passport";
+import { AdminController } from "./admin.controller";
 
 @Module({
   imports: [
@@ -21,7 +22,12 @@ import { PassportModule } from "@nestjs/passport";
       signOptions: { expiresIn: "1d" },
     }),
   ],
-  controllers: [AuthController, ArticleController, HealthController],
+  controllers: [
+    AuthController,
+    ArticleController,
+    AdminController,
+    HealthController,
+  ],
   providers: [GithubStrategy],
 })
 export class ControllersModule {}
