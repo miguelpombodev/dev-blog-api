@@ -5,6 +5,8 @@ import { Article, ArticleSchema } from "src/schemas/article.schema";
 import { env } from "src/env.config";
 import { AuthRepository } from "./auth.repository";
 import { Auth, AuthSchema } from "@schemas/auth.schema";
+import TagsRepository from "./tag.repository";
+import { Tag, TagSchema } from "@schemas/tag.schema";
 
 @Module({
   imports: [
@@ -12,9 +14,10 @@ import { Auth, AuthSchema } from "@schemas/auth.schema";
     MongooseModule.forFeature([
       { name: Article.name, schema: ArticleSchema },
       { name: Auth.name, schema: AuthSchema },
+      { name: Tag.name, schema: TagSchema },
     ]),
   ],
-  providers: [ArticlesRepository, AuthRepository],
-  exports: [ArticlesRepository, AuthRepository],
+  providers: [ArticlesRepository, AuthRepository, TagsRepository],
+  exports: [ArticlesRepository, AuthRepository, TagsRepository],
 })
 export class RepositoriesModule {}
