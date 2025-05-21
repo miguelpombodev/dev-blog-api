@@ -51,9 +51,23 @@ export class AdminController {
     return response.send(result.data);
   }
 
-  @Get()
+  @Get("/articles")
   async GetDashboardArticles(@Res() response: Response): Promise<Response> {
     const result = await this.adminService.getAllArticles();
+
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
+
+    return response.send(result.data);
+  }
+
+  @Get("/tags")
+  async GetAllTags(@Res() response: Response): Promise<Response> {
+    const result = await this.adminService.getAllTags();
 
     if (!result.isSuccessful) {
       return response.status(result.error!.statusCode).send({
