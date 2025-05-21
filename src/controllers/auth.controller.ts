@@ -5,6 +5,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { Response } from "express";
 import { authConfig } from "src/auth/auth.config";
 import { env } from "src/env.config";
+
 @Controller({
   path: "/auth",
 })

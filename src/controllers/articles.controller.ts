@@ -4,6 +4,7 @@ import { GetBySlugSchema } from "@dtos/getArticleSchema";
 import { ZodValidationPipe } from "@pipes/zod-validation.pipe";
 import { Article } from "@schemas/article.schema";
 import { ArticleService } from "@services/articles.service";
+import { JwtAuthGuard } from "src/guards/jwtAuth.guard";
 
 @Controller({
   path: "/article",
