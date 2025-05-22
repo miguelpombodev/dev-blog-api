@@ -44,11 +44,6 @@ export class AuthController {
       expires: new Date(now.getTime() + 1000 * 36000),
     });
 
-    let localDomain = env.APP_MY_DOMAIN;
-
-    if (localDomain === "localhost") {
-      localDomain = "http://localhost:3000";
-    }
-    return response.redirect(`${localDomain}/articles/manage`);
+    return response.redirect(`${env.APP_SITE_URL}/articles/manage`);
   }
 }
