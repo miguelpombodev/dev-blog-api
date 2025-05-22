@@ -4,6 +4,8 @@ import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "@nestjs/passport";
 import { Response } from "express";
 import { authConfig } from "src/auth/auth.config";
+import { env } from "src/env.config";
+
 @Controller({
   path: "/auth",
 })
@@ -34,12 +36,19 @@ export class AuthController {
     const now = new Date();
 
     response.cookie("loginCredentials", token, {
-      sameSite: true,
+      sameSite: "lax",
       httpOnly: true,
+      domain: env.APP_MY_DOMAIN,
       maxAge: 6000,
+      path: "/",
       expires: new Date(now.getTime() + 1000 * 36000),
     });
 
-    return true;
+    let localDomain = env.APP_MY_DOMAIN;
+
+    if (localDomain === "localhost") {
+      localDomain = "http://localhost:3000";
+    }
+    return response.redirect(`${localDomain}/articles/manage`);
   }
 }

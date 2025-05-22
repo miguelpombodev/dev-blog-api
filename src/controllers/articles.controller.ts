@@ -1,22 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  Param,
-  Post,
-  Put,
-  Res,
-  UseGuards,
-} from "@nestjs/common";
+import { Controller, Get, Param, Res } from "@nestjs/common";
+
 import { Response } from "express";
-import { Types } from "mongoose";
-import {
-  CreateAndUpdateArticleDto,
-  CreateAndUpdateArticleDtoSchema,
-} from "@dtos/createArticleDto";
-import { GetByIdSchema, GetBySlugSchema } from "@dtos/getArticleSchema";
+import { GetBySlugSchema } from "@dtos/getArticleSchema";
 import { ZodValidationPipe } from "@pipes/zod-validation.pipe";
 import { Article } from "@schemas/article.schema";
 import { ArticleService } from "@services/articles.service";
@@ -27,26 +12,6 @@ import { JwtAuthGuard } from "src/guards/jwtAuth.guard";
 })
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
-
-  @Post("/create")
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(201)
-  async createArticle(
-    @Res() response: Response,
-    @Body(new ZodValidationPipe(CreateAndUpdateArticleDtoSchema))
-    body: CreateAndUpdateArticleDto,
-  ): Promise<Response> {
-    const result = await this.articleService.createArticleService(body);
-
-    if (!result.isSuccessful) {
-      return response.status(result.error!.statusCode).send({
-        errorCode: result.error?.codeDescription,
-        errorDescription: result.error?.errorDescription,
-      });
-    }
-
-    return response.send(result.data);
-  }
 
   @Get("/:slug")
   async getArticleBySlug(
@@ -69,42 +34,5 @@ export class ArticleController {
   async getAllArticles(): Promise<Article[]> {
     const articles = await this.articleService.getAllArticlesService();
     return articles;
-  }
-
-  @Put("/:id")
-  @UseGuards(JwtAuthGuard)
-  async updateOneArticle(
-    @Res() response: Response,
-    @Body(new ZodValidationPipe(CreateAndUpdateArticleDtoSchema))
-    body: CreateAndUpdateArticleDto,
-    @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
-  ): Promise<Response> {
-    const result = await this.articleService.updateOneArticleService(id, body);
-
-    if (!result.isSuccessful) {
-      return response.status(result.error!.statusCode).send({
-        errorCode: result.error?.codeDescription,
-        errorDescription: result.error?.errorDescription,
-      });
-    }
-
-    return response.send(result.data);
-  }
-
-  @Delete("/:id")
-  @UseGuards(JwtAuthGuard)
-  async deleteOneArticle(
-    @Res() response: Response,
-    @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
-  ): Promise<Response> {
-    const result = await this.articleService.deleteOneArticleService(id);
-    if (!result.isSuccessful) {
-      return response.status(result.error!.statusCode).send({
-        errorCode: result.error?.codeDescription,
-        errorDescription: result.error?.errorDescription,
-      });
-    }
-
-    return response.send(result.data);
   }
 }

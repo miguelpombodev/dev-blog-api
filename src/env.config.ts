@@ -19,6 +19,7 @@ const envSchema = z.object({
   GITHUB_CALLBACK_URL: z.string(),
   AUTH_SECRET: z.string(),
   GITHUB_EMAIL: z.string().email(),
+  APP_MY_DOMAIN: z.string().default("localhost"),
 });
 
 const _env = envSchema.safeParse(process.env);
