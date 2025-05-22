@@ -1,5 +1,5 @@
 import { IUserRequest } from "@abstractions/auth/user.interface";
-import { Controller, Get, Req, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Redirect, Req, Res, UseGuards } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "@nestjs/passport";
 import { Response } from "express";
@@ -18,6 +18,7 @@ export class AuthController {
 
   @Get("github/callback")
   @UseGuards(AuthGuard("github"))
+  @Redirect(`${env.APP_SITE_URL}/articles/manage`)
   async githubCallback(
     @Req() request: IUserRequest,
     @Res({
@@ -43,7 +44,5 @@ export class AuthController {
       path: "/",
       expires: new Date(now.getTime() + 1000 * 36000),
     });
-
-    return response.redirect(`${env.APP_SITE_URL}/articles/manage`);
   }
 }
