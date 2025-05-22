@@ -20,6 +20,7 @@ const envSchema = z.object({
   AUTH_SECRET: z.string(),
   GITHUB_EMAIL: z.string().email(),
   APP_MY_DOMAIN: z.string().default("localhost"),
+  APP_SITE_URL: z.string().default("http://localhost:3000"),
 });
 
 const _env = envSchema.safeParse(process.env);
