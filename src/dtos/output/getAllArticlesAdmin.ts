@@ -1,24 +1,27 @@
 import { Article } from "@schemas/article.schema";
+import { Tag } from "@schemas/tag.schema";
 
 export class GetCategoriesCount {
-  private constructor(tag: string, count: number) {
-    this.tag = tag;
+  private constructor(name: string, color: string, count: number) {
+    this.name = name;
+    this.fill = color;
     this.count = count;
   }
 
-  private tag: string;
+  private name: string;
+  private fill: string;
   private count: number;
 
   public getTagName() {
-    return this.tag;
+    return this.name;
   }
 
   public setIncrementTag() {
     this.count += 1;
   }
 
-  public static create(tag: string, count: number): GetCategoriesCount {
-    return new GetCategoriesCount(tag, count);
+  public static create(tag: Tag, count: number): GetCategoriesCount {
+    return new GetCategoriesCount(tag.name, tag.color, count);
   }
 }
 

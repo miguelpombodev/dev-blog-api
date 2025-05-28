@@ -1,7 +1,7 @@
 import { Injectable, Scope } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Tag, TagDocument } from "@schemas/tag.schema";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 @Injectable({ scope: Scope.TRANSIENT })
 export default class TagsRepository {
@@ -10,6 +10,18 @@ export default class TagsRepository {
   async create(createdPartialTag: Partial<Tag>): Promise<Tag> {
     const tag = new this.tagModel(createdPartialTag);
     const result = await tag.save();
+
+    return result;
+  }
+
+  async getOneByTitle(title: string): Promise<Tag | null> {
+    const result = await this.tagModel.findOne({ title }).exec();
+
+    return result;
+  }
+
+  async getOneById(id: Types.ObjectId): Promise<Tag | null> {
+    const result = await this.tagModel.findById(id).exec();
 
     return result;
   }
