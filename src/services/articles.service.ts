@@ -6,11 +6,13 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { Result } from "@abstractions/result";
 import ArticleErrors from "@errors/article.errors";
+import TagsRepository from "@repositories/tag.repository";
 
 @Injectable()
 export class ArticleService {
   constructor(
     private readonly _articleRepository: ArticlesRepository,
+    private readonly _tagRepository: TagsRepository,
     @InjectModel(Article.name) private articleModel: Model<Article>,
   ) {}
 
