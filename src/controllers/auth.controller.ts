@@ -40,7 +40,8 @@ export class AuthController {
       sameSite: "lax",
       httpOnly: true,
       domain: env.APP_MY_DOMAIN,
-      maxAge: 6000,
+      secure: env.NODE_ENV === "development" ? false : true,
+      maxAge: 3600 * 1000,
       path: "/",
       expires: new Date(now.getTime() + 1000 * 36000),
     });
