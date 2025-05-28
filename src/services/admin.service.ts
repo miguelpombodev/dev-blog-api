@@ -47,7 +47,7 @@ export class AdminService {
     articles.map((article) => {
       article.tags.map((tag) => {
         const checkTagAlreadyInList = tagsCount.find(
-          (c) => c.getTagIdName().id == tag.id,
+          (c) => c.getTagName() == tag.name,
         );
 
         if (checkTagAlreadyInList) {

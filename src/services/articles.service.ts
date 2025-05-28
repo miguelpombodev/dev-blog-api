@@ -72,10 +72,19 @@ export class ArticleService {
       return Result.failure<Article>(ArticleErrors.articleNotFound);
     }
 
+    const tags = newModel.tags.map(async (tag) => {
+      const registeredTag = await this._tagRepository.getOneById(tag);
+
+      return registeredTag;
+    });
+
+    if (tags === null) {
+      return Result.failure<Article>(ArticleErrors.articleNotFound);
+    }
+
     article.title = newModel.title;
     article.content = newModel.content;
     article.slug = newModel.slug;
-    article.tags = newModel.tags;
 
     await this._articleRepository.updateOneArticle(article);
 

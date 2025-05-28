@@ -1,11 +1,14 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { BaseEntity } from "./base_entity.schema";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 @Schema({ timestamps: true })
 export class Tag extends BaseEntity {
+  @Prop()
+  id: Types.ObjectId;
+
   @Prop({ required: true })
-  title: string;
+  name: string;
 
   @Prop({ required: true })
   color: string;

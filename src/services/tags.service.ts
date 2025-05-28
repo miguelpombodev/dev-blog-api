@@ -37,7 +37,7 @@ export class TagsService {
     await this._tagRepository.create(createdTag);
 
     this._logger.log(
-      `Tag with name ${createdTag.title} was successfully created!`,
+      `Tag with name ${createdTag.name} was successfully created!`,
     );
 
     return Result.success<Record<string, string>>({ status: "success!" });

@@ -1,28 +1,27 @@
 import { Article } from "@schemas/article.schema";
-import { Types } from "mongoose";
+import { Tag } from "@schemas/tag.schema";
 
 export class GetCategoriesCount {
-  private constructor(tagId: Types.ObjectId, count: number) {
-    this.tagId = tagId;
+  private constructor(name: string, color: string, count: number) {
+    this.name = name;
+    this.fill = color;
     this.count = count;
   }
 
-  private tagId: Types.ObjectId;
+  private name: string;
+  private fill: string;
   private count: number;
 
-  public getTagIdName() {
-    return this.tagId;
+  public getTagName() {
+    return this.name;
   }
 
   public setIncrementTag() {
     this.count += 1;
   }
 
-  public static create(
-    tagId: Types.ObjectId,
-    count: number,
-  ): GetCategoriesCount {
-    return new GetCategoriesCount(tagId, count);
+  public static create(tag: Tag, count: number): GetCategoriesCount {
+    return new GetCategoriesCount(tag.name, tag.color, count);
   }
 }
 
