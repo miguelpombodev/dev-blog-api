@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 import { BaseEntity } from "./base_entity.schema";
+import { Tag } from "./tag.schema";
 
 @Schema({ timestamps: true })
 export class Article extends BaseEntity {
@@ -20,7 +21,7 @@ export class Article extends BaseEntity {
   content: string;
 
   @Prop({ required: true })
-  tags: Types.ObjectId[];
+  tags: Tag[];
 }
 
 export type ArticleDocument = Article & Document;

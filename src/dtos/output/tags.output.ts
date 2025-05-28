@@ -30,7 +30,7 @@ export class GetAllTags {
 
   public static create(tagsFromRepository: TagSchema[]): GetAllTags {
     const tags = tagsFromRepository.map((tag) =>
-      Tag.create(tag._id, tag.title, tag.color),
+      Tag.create(tag._id, tag.name, tag.color),
     );
 
     return new GetAllTags(tags);
