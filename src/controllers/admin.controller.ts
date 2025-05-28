@@ -2,6 +2,10 @@ import {
   CreateAndUpdateArticleDto,
   CreateAndUpdateArticleDtoSchema,
 } from "@dtos/createArticleDto";
+import {
+  CreateAndUpdateTagDto,
+  CreateAndUpdateTagDtoSchema,
+} from "@dtos/createTagDto";
 import { GetByIdSchema } from "@dtos/getArticleSchema";
 import {
   Body,
@@ -18,6 +22,7 @@ import {
 import { ZodValidationPipe } from "@pipes/zod-validation.pipe";
 import { AdminService } from "@services/admin.service";
 import { ArticleService } from "@services/articles.service";
+import { TagsService } from "@services/tags.service";
 import { Response } from "express";
 import { Types } from "mongoose";
 import { JwtAuthGuard } from "src/guards/jwtAuth.guard";
@@ -29,6 +34,7 @@ export class AdminController {
   constructor(
     private readonly adminService: AdminService,
     private readonly articleService: ArticleService,
+    private readonly tagService: TagsService,
   ) {}
 
   @Post("/create")
@@ -67,7 +73,7 @@ export class AdminController {
 
   @Get("/tags")
   async GetAllTags(@Res() response: Response): Promise<Response> {
-    const result = await this.adminService.getAllTags();
+    const result = await this.tagService.getAllTags();
 
     if (!result.isSuccessful) {
       return response.status(result.error!.statusCode).send({
@@ -106,6 +112,25 @@ export class AdminController {
     @Param("id", new ZodValidationPipe(GetByIdSchema)) id: Types.ObjectId,
   ): Promise<Response> {
     const result = await this.articleService.deleteOneArticleService(id);
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
+
+    return response.send(result.data);
+  }
+
+  @Post("/create/tag")
+  @UseGuards(JwtAuthGuard)
+  async createOneTag(
+    @Res() response: Response,
+    @Body(new ZodValidationPipe(CreateAndUpdateTagDtoSchema))
+    body: CreateAndUpdateTagDto,
+  ): Promise<Response> {
+    const result = await this.tagService.createTagService(body);
+
     if (!result.isSuccessful) {
       return response.status(result.error!.statusCode).send({
         errorCode: result.error?.codeDescription,
