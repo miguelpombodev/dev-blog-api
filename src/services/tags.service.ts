@@ -30,7 +30,7 @@ export class TagsService {
 
     const createdTag = new this.tagModel({
       _id: new Types.ObjectId(),
-      title: _dto.title,
+      name: _dto.title,
       color: _dto.color,
     });
 
