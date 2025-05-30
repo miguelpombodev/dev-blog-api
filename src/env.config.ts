@@ -21,6 +21,10 @@ const envSchema = z.object({
   GITHUB_EMAIL: z.string().email(),
   APP_MY_DOMAIN: z.string().default("localhost"),
   APP_SITE_URL: z.string().default("http://localhost:3000"),
+  AWS_BUCKET: z.string().default("http://localhost:3000"),
+  AWS_REGION: z.string().default("http://localhost:3000"),
+  AWS_ACCESS_KEY: z.string().default("http://localhost:3000"),
+  AWS_SECRET_KEY: z.string().default("http://localhost:3000"),
 });
 
 const _env = envSchema.safeParse(process.env);

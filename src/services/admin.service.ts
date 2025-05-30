@@ -19,19 +19,6 @@ export class AdminService {
     const articles = await this._articleRepository.getAll();
     const articlesCountByCategory = this.getArticlesCategoryCount(articles);
 
-    // const newArticlesCategoryCount = articlesCountByCategory.map(
-    //   async (category) => {
-    //     const tag = await this._tagRepository.getOneById(
-    //       category.getTagIdName(),
-    //     );
-
-    //     return {
-    //       ...tag,
-    //       ...category,
-    //     };
-    //   },
-    // );
-
     const result = GetAllArticlesAdmin.create(
       articles.length,
       articles,
