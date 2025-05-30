@@ -5,8 +5,8 @@ import { Tag } from "./tag.schema";
 
 @Schema({ timestamps: true })
 export class Article extends BaseEntity {
-  @Prop({ required: true })
-  articleImageSrc: string;
+  @Prop({ type: String, default: null })
+  articleImageSrc: string | null;
 
   @Prop({ required: true })
   title: string;

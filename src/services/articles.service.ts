@@ -56,9 +56,15 @@ export class ArticleService {
   ): Promise<Result<Record<string, string>>> {
     const fileResult = await this._fileProvider.uploadToS3(file);
 
+    if (!fileResult.isSuccessful || fileResult.data === null) {
+      return Result.failure<Record<string, string>>(
+        ArticleErrors.articleCantUpdateArticleAvatar,
+      );
+    }
+
     const result = await this._articleRepository.updateArticleAvatar(
       slug,
-      fileResult.url,
+      fileResult.data.url,
     );
 
     if (result === null) {
