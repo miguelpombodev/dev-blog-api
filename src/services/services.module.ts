@@ -7,6 +7,7 @@ import { AuthService } from "./auth.services";
 import { AdminService } from "./admin.service";
 import { TagsService } from "./tags.service";
 import { Tag, TagSchema } from "@schemas/tag.schema";
+import FileProvider from "src/providers/file.provider";
 
 @Module({
   imports: [
@@ -16,7 +17,13 @@ import { Tag, TagSchema } from "@schemas/tag.schema";
     ]),
     RepositoriesModule,
   ],
-  providers: [ArticleService, AuthService, AdminService, TagsService],
+  providers: [
+    ArticleService,
+    AuthService,
+    AdminService,
+    TagsService,
+    FileProvider,
+  ],
   exports: [ArticleService, AuthService, AdminService, TagsService],
 })
 export class ServicesModule {}

@@ -33,6 +33,23 @@ export default class ArticlesRepository {
     return articles;
   }
 
+  async updateArticleAvatar(
+    slug: string,
+    newArticleImageUrl: string,
+  ): Promise<Article | null> {
+    const result = await this.articleModel.findOneAndUpdate(
+      {
+        slug: slug,
+      },
+      {
+        $set: { articleImageSrc: newArticleImageUrl },
+      },
+      { new: true },
+    );
+
+    return result;
+  }
+
   async updateOneArticle(article: Partial<Article>): Promise<Article | null> {
     return await this.articleModel
       .findByIdAndUpdate(article._id, article, { new: true })

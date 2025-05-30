@@ -7,12 +7,14 @@ import { Model, Types } from "mongoose";
 import { Result } from "@abstractions/result";
 import ArticleErrors from "@errors/article.errors";
 import TagsRepository from "@repositories/tag.repository";
+import FileProvider from "src/providers/file.provider";
 
 @Injectable()
 export class ArticleService {
   constructor(
     private readonly _articleRepository: ArticlesRepository,
     private readonly _tagRepository: TagsRepository,
+    private readonly _fileProvider: FileProvider,
     @InjectModel(Article.name) private articleModel: Model<Article>,
   ) {}
 
@@ -31,7 +33,7 @@ export class ArticleService {
 
     const createdArticle = new this.articleModel({
       _id: new Types.ObjectId(),
-      articleImageSrc: _dto.articleImageSrc,
+      articleImageSrc: null,
       title: _dto.title,
       briefDescription: _dto.briefDescription,
       content: _dto.content,
@@ -44,6 +46,26 @@ export class ArticleService {
     this._logger.log(
       `Article with slug ${createdArticle.slug} was successfully created!`,
     );
+
+    return Result.success<Record<string, string>>({ status: "success!" });
+  }
+
+  async uploadArticleAvatarService(
+    file: Express.Multer.File,
+    slug: string,
+  ): Promise<Result<Record<string, string>>> {
+    const fileResult = await this._fileProvider.uploadToS3(file);
+
+    const result = await this._articleRepository.updateArticleAvatar(
+      slug,
+      fileResult.url,
+    );
+
+    if (result === null) {
+      return Result.failure<Record<string, string>>(
+        ArticleErrors.articleCantUpdateArticleAvatar,
+      );
+    }
 
     return Result.success<Record<string, string>>({ status: "success!" });
   }

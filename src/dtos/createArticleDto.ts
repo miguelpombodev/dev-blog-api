@@ -2,7 +2,6 @@ import { Types } from "mongoose";
 import { z } from "zod";
 
 export const CreateAndUpdateArticleDtoSchema = z.object({
-  articleImageSrc: z.string(),
   title: z.string().min(3, "Title must have at least 3 characters"),
   briefDescription: z
     .string()

@@ -6,7 +6,7 @@ import {
   CreateAndUpdateTagDto,
   CreateAndUpdateTagDtoSchema,
 } from "@dtos/createTagDto";
-import { GetByIdSchema } from "@dtos/getArticleSchema";
+import { GetByIdSchema, GetBySlugSchema } from "@dtos/getArticleSchema";
 import {
   Body,
   Controller,
@@ -17,14 +17,18 @@ import {
   Post,
   Put,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { ZodValidationPipe } from "@pipes/zod-validation.pipe";
 import { AdminService } from "@services/admin.service";
 import { ArticleService } from "@services/articles.service";
 import { TagsService } from "@services/tags.service";
 import { Response } from "express";
 import { Types } from "mongoose";
+import * as multer from "multer";
 import { JwtAuthGuard } from "src/guards/jwtAuth.guard";
 
 @Controller({
@@ -46,6 +50,28 @@ export class AdminController {
     body: CreateAndUpdateArticleDto,
   ): Promise<Response> {
     const result = await this.articleService.createArticleService(body);
+
+    if (!result.isSuccessful) {
+      return response.status(result.error!.statusCode).send({
+        errorCode: result.error?.codeDescription,
+        errorDescription: result.error?.errorDescription,
+      });
+    }
+
+    return response.send(result.data);
+  }
+
+  @Put("/article/avatar/:slug")
+  @UseInterceptors(FileInterceptor("file", { storage: multer.memoryStorage() }))
+  async updateArticleAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @Param("slug", new ZodValidationPipe(GetBySlugSchema)) slug: string,
+    @Res() response: Response,
+  ) {
+    const result = await this.articleService.uploadArticleAvatarService(
+      file,
+      slug,
+    );
 
     if (!result.isSuccessful) {
       return response.status(result.error!.statusCode).send({
