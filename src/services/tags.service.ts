@@ -62,6 +62,8 @@ export class TagsService {
 
     await this._tagRepository.deleteOneTagById(tag?._id);
 
+    this._logger.log(`Tag with name ${tag.name} was successfully deleted!`);
+
     return Result.success<Record<string, string>>({ status: "success!" });
   }
 
@@ -78,6 +80,8 @@ export class TagsService {
     tag.name = _dto.title;
 
     await this._tagRepository.updateOneTag(tag);
+
+    this._logger.log(`Tag with name ${tag.name} was successfully updated!`);
 
     return Result.success<Record<string, string>>({ status: "success!" });
   }
