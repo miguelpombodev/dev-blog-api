@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ThrottlerModule } from "@nestjs/throttler";
-import { ArticleController } from "@controllers/articles.controller";
+import { ArticleController } from "@controllers/article.controller";
 import { ControllersModule } from "@controllers/controllers.module";
 import { env } from "src/env.config";
 import { ErrorMiddleware } from "@middlewares/error.middleware";
