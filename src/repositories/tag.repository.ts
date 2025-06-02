@@ -15,7 +15,7 @@ export default class TagsRepository {
   }
 
   async getOneByTitle(title: string): Promise<Tag | null> {
-    const result = await this.tagModel.findOne({ title }).exec();
+    const result = await this.tagModel.findOne({ name: title }).exec();
 
     return result;
   }
@@ -36,5 +36,9 @@ export default class TagsRepository {
     return await this.tagModel
       .findByIdAndUpdate(tag._id, tag, { new: true })
       .exec();
+  }
+
+  async deleteOneTagById(id: Types.ObjectId): Promise<void> {
+    await this.tagModel.findByIdAndDelete(id).exec();
   }
 }

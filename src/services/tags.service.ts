@@ -50,4 +50,35 @@ export class TagsService {
 
     return Result.success<Tag[]>(tags.getTags());
   }
+
+  async deleteOneTagService(
+    title: string,
+  ): Promise<Result<Tag | Record<string, string>>> {
+    const tag = await this._tagRepository.getOneByTitle(title);
+
+    if (tag === null) {
+      return Result.failure<Tag>(TagErrors.tagNotFound);
+    }
+
+    await this._tagRepository.deleteOneTagById(tag?._id);
+
+    return Result.success<Record<string, string>>({ status: "success!" });
+  }
+
+  async updateOneTagService(
+    _dto: CreateAndUpdateTagDto,
+  ): Promise<Result<Record<string, string>>> {
+    const tag = await this._tagRepository.getOneByTitle(_dto.title);
+
+    if (tag === null) {
+      return Result.failure<Record<string, string>>(TagErrors.tagNotFound);
+    }
+
+    tag.color = _dto.color;
+    tag.name = _dto.title;
+
+    await this._tagRepository.updateOneTag(tag);
+
+    return Result.success<Record<string, string>>({ status: "success!" });
+  }
 }
