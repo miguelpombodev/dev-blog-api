@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Res,
   UploadedFile,
   UseGuards,
@@ -26,6 +27,10 @@ import {
   CreateAndUpdateArticleDtoSchema,
 } from "@dtos/createArticleDto";
 import { Types } from "mongoose";
+import {
+  getArticleQueryParams,
+  GetArticleQueryParams,
+} from "@dtos/paginationDto";
 
 @Controller({
   path: "/article",
@@ -51,8 +56,11 @@ export class ArticleController {
   }
 
   @Get()
-  async getAllArticles(): Promise<Article[]> {
-    const articles = await this.articleService.getAllArticlesService();
+  async getAllArticles(
+    @Query(new ZodValidationPipe(getArticleQueryParams))
+    params: GetArticleQueryParams,
+  ): Promise<Article[]> {
+    const articles = await this.articleService.getAllArticlesService(params);
     return articles;
   }
 

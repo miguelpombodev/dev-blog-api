@@ -8,6 +8,7 @@ import { Result } from "@abstractions/result";
 import ArticleErrors from "@errors/article.errors";
 import TagsRepository from "@repositories/tag.repository";
 import FileProvider from "src/providers/file.provider";
+import { GetArticleQueryParams } from "@dtos/paginationDto";
 
 @Injectable()
 export class ArticleService {
@@ -86,8 +87,10 @@ export class ArticleService {
     return Result.success<Article>(result);
   }
 
-  async getAllArticlesService(): Promise<Article[]> {
-    return await this._articleRepository.getAll();
+  async getAllArticlesService(
+    params: GetArticleQueryParams,
+  ): Promise<Article[]> {
+    return await this._articleRepository.getAll(params);
   }
 
   async updateOneArticleService(
