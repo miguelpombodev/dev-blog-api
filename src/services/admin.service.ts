@@ -3,6 +3,7 @@ import {
   GetAllArticlesAdmin,
   GetCategoriesCount,
 } from "@dtos/output/getAllArticlesAdmin";
+import { GetArticleQueryParams } from "@dtos/paginationDto";
 import { Injectable } from "@nestjs/common";
 import ArticlesRepository from "@repositories/articles.repositories";
 import TagsRepository from "@repositories/tag.repository";
@@ -15,8 +16,10 @@ export class AdminService {
     private readonly _tagRepository: TagsRepository,
   ) {}
 
-  async getAllArticles(): Promise<Result<GetAllArticlesAdmin>> {
-    const articles = await this._articleRepository.getAll();
+  async getAllArticles(
+    params: GetArticleQueryParams,
+  ): Promise<Result<GetAllArticlesAdmin>> {
+    const articles = await this._articleRepository.getAll(params);
     const articlesCountByCategory = this.getArticlesCategoryCount(articles);
 
     const result = GetAllArticlesAdmin.create(
