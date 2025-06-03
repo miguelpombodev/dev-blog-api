@@ -1,6 +1,7 @@
 import { Result } from "@abstractions/result";
 import {
   GetAllArticlesAdmin,
+  GetArticlesAndTagsInformations,
   GetCategoriesCount,
 } from "@dtos/output/getAllArticlesAdmin";
 import { GetArticleQueryParams } from "@dtos/paginationDto";
@@ -20,12 +21,19 @@ export class AdminService {
     params: GetArticleQueryParams,
   ): Promise<Result<GetAllArticlesAdmin>> {
     const articles = await this._articleRepository.getAll(params);
+    const tags = await this._tagRepository.getAll();
     const articlesCountByCategory = this.getArticlesCategoryCount(articles);
 
-    const result = GetAllArticlesAdmin.create(
+    const cardsInformations = this.getCardsInformations(
+      tags.length,
       articles.length,
+    );
+
+    const result = GetAllArticlesAdmin.create(
+      tags.length,
       articles,
       articlesCountByCategory,
+      cardsInformations,
     );
 
     return Result.success<GetAllArticlesAdmin>(result);
@@ -50,5 +58,21 @@ export class AdminService {
     });
 
     return tagsCount;
+  }
+
+  private getCardsInformations(
+    tagsCount: number,
+    articleCount: number,
+  ): GetArticlesAndTagsInformations[] {
+    const list: GetArticlesAndTagsInformations[] = [];
+
+    list.push(
+      GetArticlesAndTagsInformations.create("Tags Registered", tagsCount),
+    );
+    list.push(
+      GetArticlesAndTagsInformations.create("Articles published", articleCount),
+    );
+
+    return list;
   }
 }
