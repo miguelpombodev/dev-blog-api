@@ -31,6 +31,10 @@ export default class ArticlesRepository {
   async getAll(params: GetArticleQueryParams): Promise<Article[]> {
     let query = this.articleModel.find();
 
+    if (params.tags?.length) {
+      query = query.where("tags.id").in(params.tags);
+    }
+
     if (params.sort === "desc") {
       query = query.sort({ createdAt: params.sort });
     }
