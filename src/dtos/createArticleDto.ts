@@ -11,6 +11,7 @@ export const CreateAndUpdateArticleDtoSchema = z.object({
   tags: z
     .array(z.custom<Types.ObjectId>())
     .min(1, "Tags list must have at least 1 tag written"),
+  isPublished: z.boolean().default(false).optional(),
 });
 
 export type CreateAndUpdateArticleDto = z.infer<
