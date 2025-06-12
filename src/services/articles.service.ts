@@ -116,6 +116,7 @@ export class ArticleService {
     article.title = newModel.title;
     article.content = newModel.content;
     article.slug = newModel.slug;
+    article.isPublished = newModel.isPublished ?? false;
 
     await this._articleRepository.updateOneArticle(article);
 

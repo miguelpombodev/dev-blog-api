@@ -22,6 +22,9 @@ export class Article extends BaseEntity {
 
   @Prop({ required: true })
   tags: Tag[];
+
+  @Prop({ type: Boolean, default: false })
+  isPublished: boolean;
 }
 
 export type ArticleDocument = Article & Document;
